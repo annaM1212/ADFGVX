@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Шифр ADFGVX</title>
+  <link href="style.css" rel="stylesheet"> 
+</head>
+<body>
+  <div class="container">
+    <h1>Шифр ADFGVX</h1>
+    <label for="text">Текст:</label>
+    <textarea id="text"></textarea>
+    <label for="key">Ключ:</label>
+    <input type="text" id="key" value="KEY">
+    <button onclick="encrypt()">Зашифровать </button>
+    <button onclick="decrypt()">Расшифровать</button>
+    <p>Результат:</p>
+    <textarea id="result" readonly></textarea>
+  </div>
+  <script src="index.js"></script>
+</body>
+</html>
