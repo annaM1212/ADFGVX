@@ -29,12 +29,12 @@ function decrypt() {
 }
 
 function encodeText(text) {
-  return [...text].map(char => substitutionTable[char] || char).join(''); // Add char for non-substitutable characters
+  return [...text].map(char => substitutionTable[char] || char).join('');
 }
 
 function decodeText(encodedText) {
-  const pairs = encodedText.match(/.{1,2}/g) || []; // Use || [] to handle null case
-  return pairs.map(pair => reverseSubstitutionTable[pair] || pair).join(''); // Add pair for non-substitutable characters
+  const pairs = encodedText.match(/.{1,2}/g) || []; 
+  return pairs.map(pair => reverseSubstitutionTable[pair] || pair).join('');
 }
 
 function transpose(text, key) {
