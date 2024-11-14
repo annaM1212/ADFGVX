@@ -39,7 +39,7 @@ function decodeText(encodedText) {
 
 function transpose(text, key) {
   const columns = Math.ceil(text.length / key.length);
-  const paddedText = text.padEnd(columns * key.length, 'X');
+  const paddedText = text.padEnd(columns * key.length, 'C');
   const grid = [];
 
   for (let i = 0; i < columns; i++) {
@@ -64,5 +64,7 @@ function transposeBack(text, key) {
     }
   }
 
-  return grid.map(row => row.join('')).join('').replace(/X+$/, '');
+ 
+  return grid.map(row => row.join('')).join('').replace(/C+$/, '');
 }
+
