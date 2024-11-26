@@ -38,33 +38,60 @@ function decodeText(encodedText) {
 }
 
 function transpose(text, key) {
-  const columns = Math.ceil(text.length / key.length);
-  const paddedText = text.padEnd(columns * key.length, 'C');
-  const grid = [];
+  const keyLength = key.length;
+  const numCols = keyLength;
+  const numRows = Math.ceil(text.length / numCols);
+  const paddedLength = numRows * numCols;
+  const paddedText = text.padEnd(paddedLength, ' ');
 
-  for (let i = 0; i < columns; i++) {
-    grid.push(paddedText.slice(i * key.length, (i + 1) * key.length));
+  const grid = [];
+  for (let i = 0; i < numRows; i++) {
+      grid.push(paddedText.substring(i * numCols, (i + 1) * numCols));
   }
 
-  const sortedKeyIndices = [...key].map((k, i) => [k, i]).sort().map(([, i]) => i);
-  return sortedKeyIndices.map(i => grid.map(row => row[i]).join('')).join('');
+  const sortedKeyIndices = [...key].map((k, i) => [k.charCodeAt(0), i]).sort((a, b) => a[0] - b[0]).map(item => item[1]);
+
+  let result = '';
+  for (let i = 0; i < numCols; i++) {
+      for (let j = 0; j < numRows; j++) {
+          const charIndex = j * numCols + sortedKeyIndices[i];
+          const char = paddedText[charIndex];
+          if (char !== ' ' || (char === ' ' && charIndex < text.length)) {
+              result += char;
+          }
+      }
+  }
+  return result; 
 }
+
+
 
 function transposeBack(text, key) {
-  const columns = Math.ceil(text.length / key.length);
-  const sortedKeyIndices = [...key].map((k, i) => [k, i]).sort().map(([, i]) => i);
-  const grid = Array.from({ length: columns }, () => Array(key.length).fill(''));
+  const keyLength = key.length;
+  const numCols = keyLength;
+  const numRows = Math.ceil(text.length / numCols);
+  const originalTextLength = text.length; 
+
+  const grid = Array.from({ length: numRows }, () => new Array(numCols).fill(""));
+
+  const sortedKeyIndices = [...key].map((k, i) => [k.charCodeAt(0), i]).sort((a, b) => a[0] - b[0]).map(item => item[1]);
 
   let index = 0;
-  for (const i of sortedKeyIndices) {
-    for (let j = 0; j < columns; j++) {
-      if (index < text.length) {
-        grid[j][i] = text[index++];
+  for (let i = 0; i < numCols; i++) {
+      for (let j = 0; j < numRows; j++) {
+          const gridIndex = j * numCols + sortedKeyIndices[i];
+
+          if (gridIndex < originalTextLength) { 
+              grid[j][sortedKeyIndices[i]] = text[index++];
+          }
+
       }
-    }
   }
 
- 
-  return grid.map(row => row.join('')).join('').replace(/C+$/, '');
-}
+  let result = '';
+  for (let j = 0; j < numRows; j++) {
+      result += grid[j].join('');
+  }
+  return result.trim();
 
+}
